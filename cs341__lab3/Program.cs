@@ -9,8 +9,6 @@ class Program
     {
         if (args.Length < 2)
         {
-            Console.Error.WriteLine("Использование: Nital.exe <входной_файл> <выходной_файл>");
-            Console.Error.WriteLine("Пример: Nital.exe input1.txt output1.txt");
             return 1;
         }
 
@@ -83,21 +81,25 @@ class Program
             }
 
             // Топологическая сортировка
-            // SortedSet гарантирует детерминированный результат при неоднозначности
             var zero = new SortedSet<char>();
+            //зануляем всех у кого ноль
             foreach (var kv in indegree)
                 if (kv.Value == 0) zero.Add(kv.Key);
 
             var result = new StringBuilder();
+            //перебираем всех кто в 0
             while (zero.Count > 0)
             {
+                //берем первого
                 char cur = zero.Min;
                 zero.Remove(cur);
                 result.Append(cur);
 
+                //у всех кто после него, делаем меньше
                 foreach (char next in graph[cur])
                 {
                     if (--indegree[next] == 0)
+                        //кто 0, добавляем в zero
                         zero.Add(next);
                 }
             }
